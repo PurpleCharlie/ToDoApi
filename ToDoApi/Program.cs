@@ -1,4 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using ToDoApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.
+    SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 
