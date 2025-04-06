@@ -1,10 +1,12 @@
 ﻿using ToDoApi.Models;
+using ToDoApi.DTO;
 
 namespace ToDoApi.Repositories
 {
     public interface IAuthRepository
     {
-        Task<User> GetByUsernameAsync(string username);
-        Task AddUserAsync(User user);
+        public Task<bool> RegisterAsync(User user, string password);
+        public Task<User> LoginAsync(string username, string password);
+
     }
 }
