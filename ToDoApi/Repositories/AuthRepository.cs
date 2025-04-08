@@ -14,32 +14,48 @@ namespace ToDoApi.Repositories
             _db = db;
         }
 
-        public async Task<User> LoginAsync(string username, string password)
+        public async Task<User> LoginAsync(string username)
         {
+            // Ищем пользователя по имени в БД
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            // Если пользователь не найден, возвращаем null
             if (user == null)
             {
-                return null; // User not found
+                return null; 
             }
 
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-
-            return isPasswordValid ? user : null;
+            // Иначе - возвращаем найденного пользователя
+            return user;
         }
 
         public async Task<bool> RegisterAsync(User user)
         {
-            // Check if the user already exists
+            // Проверяем, существует ли пользователь с таким именем
             var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
+
+            // Если существует, возвращаем false
             if (existingUser != null)
             {
-                return false; // User already exists
+                return false; 
             }
 
-            // Add the user to the database
+            // Если не существует, добавляем нового пользователя в БД
             await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> UserExistsAsync(string username)
+        {
+            // Проверяем, существует ли пользователь с таким именем
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            // Если не существует, то false
+            if (user == null)
+                return false;
+            else
+                return true;    // Иначе - true
         }
 
 

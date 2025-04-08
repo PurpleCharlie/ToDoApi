@@ -5,8 +5,8 @@ namespace ToDoApi.Repositories
 {
     public interface IAuthRepository
     {
-        public Task<bool> RegisterAsync(User user, string password);
-        public Task<User> LoginAsync(string username, string password);
-
+        public Task<bool> RegisterAsync(User user);
+        public Task<User> LoginAsync(string username);
+        Task<bool> UserExistsAsync(string username);
     }
 }

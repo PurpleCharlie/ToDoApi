@@ -2,7 +2,7 @@
 
 namespace ToDoApi.DTO
 {
-    public class UserAuthDTO
+    public class UserLoginDTO
     {
         [Required(ErrorMessage = "Обязательное поле")]
         public string Username { get; set; }

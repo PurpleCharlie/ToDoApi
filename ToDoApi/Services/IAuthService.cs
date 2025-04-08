@@ -1,10 +1,11 @@
 ﻿using ToDoApi.DTO;
+using ToDoApi.DTO.Results;
 
 namespace ToDoApi.Services
 {
     public interface IAuthService
     {
-        Task<string> LoginAsync(UserAuthDTO user);
-        Task<bool> RegisterAsync(UserAuthDTO user);
+        Task<string> LoginAsync(UserLoginDTO user);
+        Task<RegistrationResult> RegisterAsync(RegisterDTO user);
     }
 }
