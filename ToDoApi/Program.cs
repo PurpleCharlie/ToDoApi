@@ -1,7 +1,13 @@
+global using ToDoApi.Models;
+global using ToDoApi.Configurations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using ToDoApi.Data;
 using ToDoApi.Repositories;
 using ToDoApi.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +17,22 @@ builder.Configuration.
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,                 // Проверка "от кого токен"
+            ValidateAudience = false,               // Проверка "кому токен"
+            ValidateLifetime = true,                // Проверка времени жизни внутри токена
+            ValidateIssuerSigningKey = true,        // Проверка подписи
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(builder.Configuration["Jwt:Key"]))   // Ключ подписи
+        };
+    });
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();

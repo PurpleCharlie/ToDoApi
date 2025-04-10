@@ -14,6 +14,8 @@ namespace ToDoApi.Data
                 .HasMany(u => u.Todos)
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId);
+
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration()); // Применение конфигурации RefreshTokenConfiguration
         }
     }
 }
